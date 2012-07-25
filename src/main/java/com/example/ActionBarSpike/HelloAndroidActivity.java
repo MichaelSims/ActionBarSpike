@@ -1,11 +1,13 @@
 package com.example.ActionBarSpike;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.android.debug.hv.ViewServer;
 
-public class HelloAndroidActivity extends Activity {
+public class HelloAndroidActivity extends SherlockActivity {
 
     private static final String TAG = "ActionBarSpike";
 
@@ -21,8 +23,16 @@ public class HelloAndroidActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate");
         setContentView(R.layout.main);
+        getSupportActionBar().setTitle("Testing");
 
         ViewServer.get(this).addWindow(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getSupportMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
