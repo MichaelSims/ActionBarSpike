@@ -8,16 +8,11 @@
     <packaging>apk</packaging>
     <name>ActionBarSpike</name>
 
-    <properties>
-        <platform.version>2.3.3
-        </platform.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
-            <version>${platform.version}</version>
+            <version>4.0</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -27,15 +22,20 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.1.0</version>
                 <configuration>
-                    <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
-                    <assetsDirectory>${project.basedir}/assets</assetsDirectory>
-                    <resourceDirectory>${project.basedir}/res</resourceDirectory>
-                    <nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
                     <sdk>
-                        <platform>10</platform>
+                        <platform>14</platform>
                     </sdk>
+                    <sign>
+                        <debug>false</debug>
+                    </sign>
+                    <dex>
+                        <jvmArguments>
+                            <jvmArgument>-Xms256m</jvmArgument>
+                            <jvmArgument>-Xmx768m</jvmArgument>
+                        </jvmArguments>
+                    </dex>
                     <undeployBeforeDeploy>true</undeployBeforeDeploy>
                 </configuration>
                 <extensions>true</extensions>
@@ -49,6 +49,29 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <goals>
+                            <!--suppress MavenModelInspection -->
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <goals>
+                            <!--suppress MavenModelInspection -->
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 </project>
