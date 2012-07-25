@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="One" android:showAsAction="ifRoom"/>
+    <item android:title="Two" android:showAsAction="ifRoom"/>
+    <item android:title="Three" android:showAsAction="ifRoom"/>
+    <item android:title="Four" android:showAsAction="ifRoom"/>
+    <item android:title="Five" android:showAsAction="ifRoom"/>
+    <item android:title="Six" android:showAsAction="ifRoom"/>
+    <item android:title="Seven" android:showAsAction="ifRoom"/>
+</menu>

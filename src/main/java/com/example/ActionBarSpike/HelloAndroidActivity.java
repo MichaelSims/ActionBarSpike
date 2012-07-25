@@ -3,6 +3,8 @@ package com.example.ActionBarSpike;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import com.android.debug.hv.ViewServer;
 
 public class HelloAndroidActivity extends Activity {
@@ -21,8 +23,16 @@ public class HelloAndroidActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate");
         setContentView(R.layout.main);
+        getActionBar().setTitle("Testing");
 
         ViewServer.get(this).addWindow(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
