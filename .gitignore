@@ -30,4 +30,4 @@ build_activecloaked_apk.sh
 PlayNowApp/assets/data/acv.dat
 PlayNowApp/assets/data/irss.dat
 PlayNowApp/libs/armeabi/libcws_ps.so
-
+gen-external-apklibs
