@@ -3,6 +3,7 @@ package com.example.ActionBarSpike;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import com.android.debug.hv.ViewServer;
 
 public class HelloAndroidActivity extends Activity {
 
@@ -20,6 +21,20 @@ public class HelloAndroidActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate");
         setContentView(R.layout.main);
+
+        ViewServer.get(this).addWindow(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        ViewServer.get(this).setFocusedWindow(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ViewServer.get(this).removeWindow(this);
     }
 
 }
