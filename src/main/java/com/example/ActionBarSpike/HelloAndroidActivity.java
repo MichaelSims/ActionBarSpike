@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -18,7 +17,7 @@ public class HelloAndroidActivity extends SherlockActivity {
 
     private Handler handler = new Handler();
 
-    private EditText searchEditText;
+    private CustomSuggestionsTextView searchEditText;
 
     /**
      * Called when the activity is first created.
@@ -43,7 +42,7 @@ public class HelloAndroidActivity extends SherlockActivity {
         menuInflater.inflate(R.menu.menu, menu);
 
         final MenuItem search = menu.findItem(R.id.menu_search);
-        searchEditText = (EditText) search.getActionView();
+        searchEditText = (CustomSuggestionsTextView) search.getActionView();
 
         search.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
