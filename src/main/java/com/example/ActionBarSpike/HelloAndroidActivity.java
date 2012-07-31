@@ -66,7 +66,6 @@ public class HelloAndroidActivity extends SherlockActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Log.e(TAG, "EXPAND!");
                 searchEditText.requestFocus();
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT);
