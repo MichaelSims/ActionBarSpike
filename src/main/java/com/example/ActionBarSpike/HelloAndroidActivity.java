@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import com.android.debug.hv.ViewServer;
 
 public class HelloAndroidActivity extends Activity {
@@ -18,7 +17,7 @@ public class HelloAndroidActivity extends Activity {
 
     private Handler handler = new Handler();
 
-    private EditText searchEditText;
+    private CustomSuggestionsTextView searchEditText;
 
     /**
      * Called when the activity is first created.
@@ -43,7 +42,7 @@ public class HelloAndroidActivity extends Activity {
         menuInflater.inflate(R.menu.menu, menu);
 
         final MenuItem search = menu.findItem(R.id.menu_search);
-        searchEditText = (EditText) search.getActionView();
+        searchEditText = (CustomSuggestionsTextView) search.getActionView();
 
         search.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
