@@ -4,12 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ListPopupWindow;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 
@@ -19,7 +25,9 @@ public class HelloAndroidActivity extends Activity {
 
     private Handler handler = new Handler();
 
-    private CustomSuggestionsTextView searchEditText;
+    private PopupWindow popupWindow;
+
+    private EditText searchEditText;
     private TextView textView;
 
     /**
@@ -36,7 +44,10 @@ public class HelloAndroidActivity extends Activity {
         setContentView(R.layout.main);
         getActionBar().setTitle("Testing");
 
-        textView = new TextView(HelloAndroidActivity.this);
+        textView = new TextView(this);
+
+        popupWindow = new PopupWindow(this);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         ViewServer.get(this).addWindow(this);
     }
@@ -47,12 +58,23 @@ public class HelloAndroidActivity extends Activity {
         menuInflater.inflate(R.menu.menu, menu);
 
         final MenuItem search = menu.findItem(R.id.menu_search);
-        searchEditText = (CustomSuggestionsTextView) search.getActionView();
-        searchEditText.setContentViewProvider(new CustomSuggestionsTextView.DropDownContentViewProvider() {
+        searchEditText = (EditText) search.getActionView();
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public View getDropDownContentView() {
-                textView.setText("Hello, you typed, initially at least " + searchEditText.getText().toString());
-                return textView;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    showDropDown();
+                } else {
+                    dismissDropDown();
+                }
             }
         });
 
@@ -101,6 +123,29 @@ public class HelloAndroidActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         ViewServer.get(this).removeWindow(this);
+    }
+
+    public void showDropDown() {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!popupWindow.isShowing()) {
+                    // Make sure the list does not obscure the IME when shown for the first time.
+                    popupWindow.setInputMethodMode(ListPopupWindow.INPUT_METHOD_NEEDED);
+                }
+                popupWindow.setWidth(searchEditText.getWidth());
+                popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+                if (searchEditText.getWindowToken() != null) { // Protect against trying to show dropdown on a destroyed view
+                    textView.setText("Hello, you typed, initially at least " + searchEditText.getText().toString());
+                    popupWindow.setContentView(textView);
+                    popupWindow.showAsDropDown(searchEditText);
+                }
+            }
+        });
+    }
+
+    public void dismissDropDown() {
+        popupWindow.dismiss();
     }
 
 }
