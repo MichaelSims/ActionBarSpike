@@ -15,7 +15,7 @@ import com.android.debug.hv.ViewServer;
 
 public class HelloAndroidActivity extends Activity {
 
-    private static final String TAG = "ActionBarSpike";
+    private static final String TAG = HelloAndroidActivity.class.getSimpleName();
 
     private Handler handler = new Handler();
 
