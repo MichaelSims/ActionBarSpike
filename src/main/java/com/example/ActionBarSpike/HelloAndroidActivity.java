@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import com.android.debug.hv.ViewServer;
 
 public class HelloAndroidActivity extends Activity {
@@ -18,6 +20,7 @@ public class HelloAndroidActivity extends Activity {
     private Handler handler = new Handler();
 
     private CustomSuggestionsTextView searchEditText;
+    private TextView textView;
 
     /**
      * Called when the activity is first created.
@@ -33,6 +36,8 @@ public class HelloAndroidActivity extends Activity {
         setContentView(R.layout.main);
         getActionBar().setTitle("Testing");
 
+        textView = new TextView(HelloAndroidActivity.this);
+
         ViewServer.get(this).addWindow(this);
     }
 
@@ -43,6 +48,13 @@ public class HelloAndroidActivity extends Activity {
 
         final MenuItem search = menu.findItem(R.id.menu_search);
         searchEditText = (CustomSuggestionsTextView) search.getActionView();
+        searchEditText.setContentViewProvider(new CustomSuggestionsTextView.DropDownContentViewProvider() {
+            @Override
+            public View getDropDownContentView() {
+                textView.setText("Hello, you typed, initially at least " + searchEditText.getText().toString());
+                return textView;
+            }
+        });
 
         search.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override

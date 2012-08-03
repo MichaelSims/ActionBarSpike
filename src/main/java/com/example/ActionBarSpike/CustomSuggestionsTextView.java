@@ -2,7 +2,6 @@ package com.example.ActionBarSpike;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.nfc.Tag;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -14,10 +13,15 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
-import android.widget.TextView;
 
 /** Shamelessly hacked up version of {@link android.widget.AutoCompleteTextView}. */
 public class CustomSuggestionsTextView extends EditText {
+
+    public interface DropDownContentViewProvider {
+        View getDropDownContentView();
+    }
+
+    private DropDownContentViewProvider contentViewProvider;
 
     private PopupWindow popupWindow;
     private PassThroughClickListener passThroughClickListener = new PassThroughClickListener();
@@ -44,14 +48,6 @@ public class CustomSuggestionsTextView extends EditText {
         Log.e(getClass().getSimpleName(), "Initialize");
         popupWindow = new PopupWindow(context);
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
-        // TODO replace this hardcoded popup window with something that is provided from outside
-        popupWindow.setWidth(ViewGroup.LayoutParams.FILL_PARENT); // TODO match with anchor
-        //popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setHeight(300);
-        TextView contentView = new TextView(context);
-        contentView.setText("A dropdown");
-        popupWindow.setContentView(contentView);
 
         setFocusable(true);
 
@@ -148,6 +144,7 @@ public class CustomSuggestionsTextView extends EditText {
     }
 
     public void showDropDown() {
+        final View anchor = this;
         post(new Runnable() {
             @Override
             public void run() {
@@ -155,10 +152,18 @@ public class CustomSuggestionsTextView extends EditText {
                     // Make sure the list does not obscure the IME when shown for the first time.
                     popupWindow.setInputMethodMode(ListPopupWindow.INPUT_METHOD_NEEDED);
                 }
-                popupWindow.showAsDropDown(CustomSuggestionsTextView.this);
-
+                setPopupDimensions(anchor);
+                if (anchor.getWindowToken() != null) { // Protect against trying to show dropdown on a destroyed view
+                    popupWindow.setContentView(contentViewProvider.getDropDownContentView());
+                    popupWindow.showAsDropDown(anchor);
+                }
             }
         });
+    }
+
+    private void setPopupDimensions(View anchor) {
+        popupWindow.setWidth(anchor.getWidth());
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
     }
 
     public void dismissDropDown() {
@@ -191,5 +196,9 @@ public class CustomSuggestionsTextView extends EditText {
                 wrapped.onClick(v);
             }
         }
+    }
+
+    public void setContentViewProvider(DropDownContentViewProvider contentViewProvider) {
+        this.contentViewProvider = contentViewProvider;
     }
 }
