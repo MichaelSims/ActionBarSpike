@@ -21,10 +21,8 @@ public class EmbeddedSearchActivity extends BaseActivity {
     }
 
     @Override
-    protected void addSearchResultsFragment() {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.search_results_container, new SearchResultsFragment(), null);
-        ft.commit();
+    protected void addSearchResultsFragment(FragmentTransaction ft, String tag) {
+        ft.add(R.id.search_results_container, new SearchResultsFragment(), tag);
     }
 
     @Override

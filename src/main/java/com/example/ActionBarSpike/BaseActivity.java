@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +20,8 @@ public abstract class BaseActivity extends FragmentActivity {
     private EditText searchEditText;
     private final String TAG = getClass().getSimpleName();
 
+    protected static final String SEARCH_RESULTS_FRAGMENT_TAG = "SEARCH_RESULTS_FRAGMENT_TAG";
+
     private Handler handler = new Handler();
 
     @Override
@@ -25,13 +29,19 @@ public abstract class BaseActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         getActionBar().setTitle("Testing");
         ViewServer.get(this).addWindow(this);
-        addSearchResultsFragment();
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment existingFragment = fm.findFragmentByTag(SEARCH_RESULTS_FRAGMENT_TAG);
+        if (existingFragment != null) {
+            ft.remove(existingFragment);
+        }
+        addSearchResultsFragment(ft, SEARCH_RESULTS_FRAGMENT_TAG);
+        ft.commit();
     }
 
-    protected void addSearchResultsFragment() {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(new SearchResultsFragment(), null);
-        ft.commit();
+    protected void addSearchResultsFragment(FragmentTransaction ft, String tag) {
+        ft.add(new SearchResultsFragment(), tag);
     }
 
     @Override
