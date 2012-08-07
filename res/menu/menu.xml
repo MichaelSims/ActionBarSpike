@@ -5,6 +5,8 @@
           android:icon="@android:drawable/ic_menu_search"
           android:showAsAction="always|collapseActionView"
           android:actionLayout="@layout/search_view"/>
+    <item android:id="@+id/menu_embedded_search"
+          android:title="Embedded Search" android:showAsAction="ifRoom"/>
     <item android:title="One" android:showAsAction="ifRoom"/>
     <item android:title="Two" android:showAsAction="ifRoom"/>
     <item android:title="Three" android:showAsAction="ifRoom"/>
