@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:text="I like ducks."
             />
-    <ListView
+    <com.example.ActionBarSpike.DropDownListView
             android:layout_height="fill_parent"
             android:layout_width="fill_parent"
             android:id="@+id/search_results_list"
